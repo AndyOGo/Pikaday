@@ -5,6 +5,10 @@
 - Add theme class support, see #260
 - Fix on iOS, see #101
 
+## 1.3.3 - 2015-04-14
+
+- Add injectMode 'relative' or 'bottomline'
+
 ## 1.3.2 - 2015-02-17
 
 - Add options to disable days, see #171
