@@ -93,6 +93,7 @@ Pikaday has many useful options:
 * `showWeekNumber` show the ISO week number at the head of the row (default `false`)
 * `isRTL` reverse the calendar for right-to-left languages
 * `i18n` language defaults for month and weekday names (see internationalization below)
+* `showOffMonthDays` render days of the calendar grid that fall in the next or previous months to the current month instead of rendering an empty table cell (default: false)
 * `yearSuffix` additional text to append to the year in the title
 * `showMonthAfterYear` render the month after year in the title (default `false`)
 * `numberOfMonths` number of visible calendars
