@@ -247,10 +247,14 @@
         // Render days in the next and previous months instead of empty cells
         showOffMonthDays: false,
 
+        // Render Today field at bottom of datepicker
+        showToday: false,
+
         // internationalization
         i18n: {
             previousMonth : 'Previous Month',
             nextMonth     : 'Next Month',
+            today         : 'Today',
             months        : ['January','February','March','April','May','June','July','August','September','October','November','December'],
             weekdays      : ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
             weekdaysShort : ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
@@ -690,9 +694,11 @@
         /**
          * return a formatted string of the current selection (using Moment.js if available)
          */
-        toString: function(format)
+        toString: function(format, date)
         {
-            return !isDate(this._d) ? '' : hasMoment ? moment(this._d).format(format || this._o.format) : this._d.toDateString();
+            date = date || this._d;
+
+            return !isDate(date) ? '' : hasMoment ? moment(date).format(format || this._o.format) : date.toDateString();
         },
 
         /**
@@ -910,6 +916,15 @@
                 html += '<div class="pika-lendar">' +
                     renderTitle(this, c, this.calendars[c].year, this.calendars[c].month, this.calendars[0].year) +
                     this.render(this.calendars[c].year, this.calendars[c].month) +
+                '</div>';
+            }
+
+            if(opts.showToday) {
+                var now = new Date();
+
+                html += '<div class="cf pika-today">' +
+                    '<strong class="pika-today-title">' + opts.i18n.today + '</strong>' +
+                    '<time class="pika-today-date" datetime="' + now.toISOString() + '">' + this.toString(opts.format, now) + '</time>' +
                 '</div>';
             }
 
