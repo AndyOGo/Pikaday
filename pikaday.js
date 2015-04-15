@@ -406,7 +406,11 @@
 
     renderTable = function(opts, data)
     {
-        return '<table cellpadding="0" cellspacing="0" class="pika-table">' + renderHead(opts) + renderBody(data) + '</table>';
+        return '<div class="pika-box">' +
+            '<table cellpadding="0" cellspacing="0" class="pika-table">' +
+                renderHead(opts) + renderBody(data) +
+            '</table>' +
+            '</div>';
     },
 
 
