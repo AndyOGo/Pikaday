@@ -166,6 +166,7 @@
   color: #999; }
 
 .pika-today-title {
+  cursor: pointer;
   float: left; }
 
 .pika-today-date {
