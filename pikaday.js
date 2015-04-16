@@ -432,14 +432,19 @@
                 return;
             }
             e = e || window.event;
-            var target = e.target || e.srcElement;
+            var target = e.target || e.srcElement,
+                isToday;
+
             if (!target) {
                 return;
             }
 
             if (!hasClass(target.parentNode, 'is-disabled')) {
-                if (hasClass(target, 'pika-button') && !hasClass(target, 'is-empty')) {
-                    self.setDate(new Date(target.getAttribute('data-pika-year'), target.getAttribute('data-pika-month'), target.getAttribute('data-pika-day')));
+                if ((hasClass(target, 'pika-button') && !hasClass(target, 'is-empty'))
+                    || (opts.showToday && (isToday = hasClass(target, 'pika-today-title')))) {
+                    self.setDate(isToday ? new Date() :
+                        new Date(target.getAttribute('data-pika-year'), target.getAttribute('data-pika-month'), target.getAttribute('data-pika-day')));
+
                     if (opts.bound) {
                         sto(function() {
                             self.hide();
