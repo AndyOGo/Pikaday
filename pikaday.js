@@ -969,24 +969,7 @@
                 left, top, clientRect,
                 cssText = ['position: absolute'];
 
-            if(opts.injectMode === 'relative') {
-                var positions = opts.position.split(/\s+/),
-                    positionSwap = {
-                        top: 'bottom',
-                        bottom: 'top'
-                    },
-                    position, i, l;
-
-                for(i=0, l=positions.length; i<l; i++) {
-                    position = positions[i];
-
-                    // switch position properties if top or bottom
-                    if(position in positionSwap)
-                        position = positionSwap[position];
-
-                    cssText.push(position + ':0');
-                }
-            } else {
+            if(opts.injectMode !== 'relative') {
                 if (typeof field.getBoundingClientRect === 'function') {
                     clientRect = field.getBoundingClientRect();
                     left = clientRect.left + window.pageXOffset;
