@@ -566,7 +566,10 @@
         };
 
         self.el = document.createElement('div');
-        self.el.className = 'pika-single' + (opts.isRTL ? ' is-rtl' : '') + (opts.theme ? ' ' + opts.theme : '');
+        self.el.className = 'pika-single' +
+            (opts.isRTL ? ' is-rtl' : '') +
+            (opts.theme ? ' ' + opts.theme : '') +
+            (opts.position ? ' pika-' + opts.position.split(/\s+/).join(' pika-') : '');
 
         addEvent(self.el, 'ontouchend' in document ? 'touchend' : 'mousedown', self._onMouseDown, true);
         addEvent(self.el, 'change', self._onChange);
