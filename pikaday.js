@@ -956,9 +956,8 @@
 
         adjustPosition: function()
         {
-            var field, pEl, width, height, viewportWidth, viewportHeight, scrollTop, left, top, clientRect;
-            
-            if (this._o.container) return;
+            if (this._o.container ||
+                this._o.injectMode === 'relative') return;
 
             var opts = this._o,
                 field = opts.trigger, pEl = field,
@@ -969,40 +968,38 @@
                 left, top, clientRect,
                 cssText = ['position: absolute'];
 
-            if(opts.injectMode !== 'relative') {
-                if (typeof field.getBoundingClientRect === 'function') {
-                    clientRect = field.getBoundingClientRect();
-                    left = clientRect.left + window.pageXOffset;
-                    top = clientRect.bottom + window.pageYOffset;
-                } else {
-                    left = pEl.offsetLeft;
-                    top = pEl.offsetTop + pEl.offsetHeight;
-                    while ((pEl = pEl.offsetParent)) {
-                        left += pEl.offsetLeft;
-                        top += pEl.offsetTop;
-                    }
+            if (typeof field.getBoundingClientRect === 'function') {
+                clientRect = field.getBoundingClientRect();
+                left = clientRect.left + window.pageXOffset;
+                top = clientRect.bottom + window.pageYOffset;
+            } else {
+                left = pEl.offsetLeft;
+                top = pEl.offsetTop + pEl.offsetHeight;
+                while ((pEl = pEl.offsetParent)) {
+                    left += pEl.offsetLeft;
+                    top += pEl.offsetTop;
                 }
-
-                // default position is bottom & left
-                if ((opts.reposition && left + width > viewportWidth) ||
-                    (
-                    opts.position.indexOf('right') > -1 &&
-                    left - width + field.offsetWidth > 0
-                    )
-                ) {
-                    left = left - width + field.offsetWidth;
-                }
-                if ((opts.reposition && top + height > viewportHeight + scrollTop) ||
-                    (
-                    opts.position.indexOf('top') > -1 &&
-                    top - height - field.offsetHeight > 0
-                    )
-                ) {
-                    top = top - height - field.offsetHeight;
-                }
-
-                cssText.push('left: ' + left + 'px', 'top: ' + top + 'px');
             }
+
+            // default position is bottom & left
+            if ((opts.reposition && left + width > viewportWidth) ||
+                (
+                opts.position.indexOf('right') > -1 &&
+                left - width + field.offsetWidth > 0
+                )
+            ) {
+                left = left - width + field.offsetWidth;
+            }
+            if ((opts.reposition && top + height > viewportHeight + scrollTop) ||
+                (
+                opts.position.indexOf('top') > -1 &&
+                top - height - field.offsetHeight > 0
+                )
+            ) {
+                top = top - height - field.offsetHeight;
+            }
+
+            cssText.push('left: ' + left + 'px', 'top: ' + top + 'px');
 
             this.el.style.cssText = cssText.join(';');
         },
