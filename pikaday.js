@@ -1138,7 +1138,9 @@
                     removeEvent(this._o.trigger, 'blur', this._onInputBlur);
                 }
             }
-            if (this.el.parentNode) {
+            if(this.injector && this.injector.parentNode ) {
+                this.injector.parentNode.removeChild(this.injector);
+            } else if (this.el.parentNode) {
                 this.el.parentNode.removeChild(this.el);
             }
         }
