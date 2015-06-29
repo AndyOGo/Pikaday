@@ -970,8 +970,7 @@
 
         adjustPosition: function()
         {
-            if (this._o.container ||
-                this._o.injectMode === 'relative') return;
+            if (this._o.container) return;
 
             var opts = this._o,
                 field = opts.trigger, pEl = field,
@@ -982,38 +981,57 @@
                 left, top, clientRect,
                 cssText = ['position: absolute'];
 
-            if (typeof field.getBoundingClientRect === 'function') {
-                clientRect = field.getBoundingClientRect();
-                left = clientRect.left + window.pageXOffset;
-                top = clientRect.bottom + window.pageYOffset;
-            } else {
-                left = pEl.offsetLeft;
-                top = pEl.offsetTop + pEl.offsetHeight;
-                while ((pEl = pEl.offsetParent)) {
-                    left += pEl.offsetLeft;
-                    top += pEl.offsetTop;
+            if(opts.injectMode === 'relative') {
+                var positions = opts.position.split(/\s+/),
+                    positionSwap = {
+                        top: 'bottom',
+                        bottom: 'top'
+                    },
+                    position, i, l;
+
+                for(i=0, l=positions.length; i<l; i++) {
+                    position = positions[i];
+
+                    // switch position properties if top or bottom
+                    if(position in positionSwap)
+                        position = positionSwap[position];
+
+                    cssText.push(position + ':0');
                 }
-            }
+            } else {
+                if (typeof field.getBoundingClientRect === 'function') {
+                    clientRect = field.getBoundingClientRect();
+                    left = clientRect.left + window.pageXOffset;
+                    top = clientRect.bottom + window.pageYOffset;
+                } else {
+                    left = pEl.offsetLeft;
+                    top = pEl.offsetTop + pEl.offsetHeight;
+                    while ((pEl = pEl.offsetParent)) {
+                        left += pEl.offsetLeft;
+                        top += pEl.offsetTop;
+                    }
+                }
 
-            // default position is bottom & left
-            if ((opts.reposition && left + width > viewportWidth) ||
-                (
-                opts.position.indexOf('right') > -1 &&
-                left - width + field.offsetWidth > 0
-                )
-            ) {
-                left = left - width + field.offsetWidth;
-            }
-            if ((opts.reposition && top + height > viewportHeight + scrollTop) ||
-                (
-                opts.position.indexOf('top') > -1 &&
-                top - height - field.offsetHeight > 0
-                )
-            ) {
-                top = top - height - field.offsetHeight;
-            }
+                // default position is bottom & left
+                if ((opts.reposition && left + width > viewportWidth) ||
+                    (
+                    opts.position.indexOf('right') > -1 &&
+                    left - width + field.offsetWidth > 0
+                    )
+                ) {
+                    left = left - width + field.offsetWidth;
+                }
+                if ((opts.reposition && top + height > viewportHeight + scrollTop) ||
+                    (
+                    opts.position.indexOf('top') > -1 &&
+                    top - height - field.offsetHeight > 0
+                    )
+                ) {
+                    top = top - height - field.offsetHeight;
+                }
 
-            cssText.push('left: ' + left + 'px', 'top: ' + top + 'px');
+                cssText.push('left: ' + left + 'px', 'top: ' + top + 'px');
+            }
 
             this.el.style.cssText = cssText.join(';');
         },
